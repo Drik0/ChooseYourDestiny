@@ -35,21 +35,56 @@ class ViewController: UIViewController {
     @IBOutlet weak var storyTextView: UILabel!
     
     
-    var storyIndex:Int = 1
-    
+    var storyIndex:Int = 1 // Tracks the story number user is on
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         storyTextView.text = story1
-        
         topButton.setTitle(answer1a, for: .normal)
         bottomButton.setTitle(answer1b, for: .normal)
         
     }
-
+    // Restarts the game
+    func startOver() {
+        storyTextView.text = story1
+        
+        topButton.setTitle(answer1a, for: .normal)
+        bottomButton.setTitle(answer1b, for: .normal)
+        topButton.isHidden = false
+        bottomButton.isHidden = false
+        storyIndex = 1
+    }
     
+    // Tap gesture to do a specific task when user touches the screen
+    func addTapGesture(view: UIView) {
+    
+    let tapGesture = UITapGestureRecognizer(target: self, action: #selector(ViewController.newTap(sender:)))
+    view.addGestureRecognizer(tapGesture)
+    }
+    
+    // Adds the alert to the tap gesture
+    @objc func newTap(sender: UITapGestureRecognizer) {
+        callAlert()
+    }
+    
+    // Alert with option to restart the game
+    func callAlert() {
+        
+            let alert = UIAlertController(title: "Game finished.", message: "Would you like to start over?", preferredStyle: UIAlertControllerStyle.alert)
+        
+            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+            self.startOver()
+            }))
+        
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+            print("Handle Cancel Logic here")
+            }))
+        
+            present(alert, animated: true, completion: nil)
+
+    }
     // User presses one of the buttons
     @IBAction func buttonPressed(_ sender: UIButton) {
     
@@ -68,11 +103,13 @@ class ViewController: UIViewController {
             topButton.isHidden = true
             bottomButton.isHidden = true
             storyIndex = 6
+            addTapGesture(view: view) // Activate tap gesture (which will call the alert when user taps the screen)
         } else if sender.tag == 2 && storyIndex == 3 {
             storyTextView.text = story5
             topButton.isHidden = true
             bottomButton.isHidden = true
             storyIndex = 5
+            addTapGesture(view: view) // Activate tap gesture (which will call the alert when user taps the screen)
         } else if sender.tag == 1 && storyIndex == 2 {
             storyTextView.text = story3
             topButton.setTitle(answer3a, for: .normal)
@@ -83,13 +120,11 @@ class ViewController: UIViewController {
             topButton.isHidden = true
             bottomButton.isHidden = true
             storyIndex = 4
+            addTapGesture(view: view) // Activate tap gesture (which will call the alert when user taps the screen)
         }
-        // TODO Step 6: Modify the IF-Statement to complete the story
-        
     
     }
     
-
 
 
 }
